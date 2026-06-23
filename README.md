@@ -1,7 +1,8 @@
 # 🏆 Customer360 Churn Platform
-> End-to-end CRM customer churn prediction platform using **Bronze → Silver → Gold Medallion Architecture**, scikit-learn Pipeline, XGBoost with GridSearchCV hyperparameter tuning, and an interactive Streamlit dashboard — built on the IBM Telco Customer Churn dataset.
+> End-to-end CRM customer churn prediction platform using **Bronze → Silver → Gold Medallion Architecture**, scikit-learn Pipeline, XGBoost with GridSearchCV hyperparameter tuning, and an interactive Streamlit dashboard built on the IBM Telco Customer Churn dataset.
 
 ---
+🔗 [Streamlit Link](https://customer360-churn-platform.streamlit.app/)
 
 ## 👤 Author
 
@@ -69,22 +70,23 @@ Customer churn is one of the most critical business problems in the telecom indu
 customer360-churn-platform/
 │
 ├── data/
-│   ├── raw/                        ← Place downloaded Kaggle CSV here
+│   ├── telco_raw.csv               ← Place downloaded Kaggle CSV here
+│   ├── crm_churn.db                ← database file (automatically generated)
 │   └── processed/                  ← Gold output CSV written here
 │
 ├── etl_sequence/
 │   ├── 01_ingest_bronze.py         ← Bronze: raw ingestion + metadata
 │   ├── 02_bronze_profiler.py       ← Bronze: data profiling report
 │   ├── 03_bronze_to_silver.py      ← Silver: clean, split, join feature table
-│   └── 04_feature_engineering.py  ← Silver: engineered features
+│   └── 04_silver_feature_engineering.py  ← Silver: engineered features
 │
 ├── Notebook/
-│   └── 03_gold_eda_modeling.ipynb  ← Gold: EDA + XGBoost Pipeline + GridSearchCV
+│   └── 05_gold_eda_modeling.ipynb  ← Gold: EDA + XGBoost Pipeline + GridSearchCV
 │
 ├── sql/
 │   ├── bronze_schema.sql           ← Bronze table reference schema
-│   ├── silver_feature_table.sql    ← Silver join query reference
-│   └── gold_churn_scores_view.sql  ← Gold CRM view reference
+│   ├── silver_schema.sql           ← Silver join query reference
+│   └── gold_schema.sql             ← Gold CRM view reference
 │
 ├── models/
 │   └── churn_model.pkl             ← Saved tuned Pipeline (scaler + XGBoost)
@@ -107,19 +109,19 @@ pip install -r requirements.txt
 # Save CSV to: data/raw/telco_customer_churn.csv
 
 # 3. Bronze — Raw ingestion
-python etl_sequence/01_ingest_bronze.py
+python 01_ingest_bronze.py
 
-# 4. Bronze — Profile report
-python etl_sequence/02_bronze_profiler.py
+# 4. Bronze — Profile report (optional to make sure the table working)
+python 02_bronze_profiler.py
 
 # 5. Silver — ETL + feature table creation
 python etl_sequence/03_bronze_to_silver.py
 
 # 6. Silver — Feature engineering
-python etl_sequence/04_feature_engineering.py
+python etl_sequence/04_silver_feature_engineering.py
 
 # 7. Gold — Open and run the notebook
-#    Notebook/03_gold_eda_modeling.ipynb
+#    Notebook/05_gold_eda_modeling.ipynb
 
 # 8. Launch Streamlit dashboard
 streamlit run app.py
@@ -144,8 +146,6 @@ streamlit run app.py
 | `n_estimators` | 100, 200, 300 |
 | `max_depth` | 3, 4, 5 |
 | `learning_rate` | 0.01, 0.05, 0.1 |
-| `subsample` | 0.8, 1.0 |
-| `colsample_bytree` | 0.8, 1.0 |
 
 ---
 
